@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Tech Bank | Avanzada Financiera</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Eco-Tech Bank</h1>
+            <p id="fecha-actual"></p>
+        </header>
+
+        <div id="login-container">
+            <h3>Bienvenido a la 22nd Century Bank</h3>
+            <input type="password" id="pin-input" value="1234" placeholder="Ingrese PIN">
+            <button id="btn-login">Entrar al Sistema</button>
+        </div>
+
+        <div id="dashboard" class="hidden">
+            <div class="balance-card">
+                <h2>Saldo: <span id="saldo-valor">$0</span></h2>
+                <small>Cotización Dolar: $<span id="dolar-valor">0</span></small>
+            </div>
+
+            <div class="operaciones">
+                <input type="number" id="monto-input" placeholder="Monto de la operación">
+                <div class="grid-botones">
+                    <button id="btn-deposito" class="btn-eco">Depositar</button>
+                    <button id="btn-extraccion" class="btn-danger">Extraer</button>
+                </div>
+            </div>
+
+            <div class="movimientos">
+                <h4>Historial de Transacciones</h4>
+                <ul id="lista-transacciones"></ul>
+            </div>
+
+            <button id="btn-logout">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>
