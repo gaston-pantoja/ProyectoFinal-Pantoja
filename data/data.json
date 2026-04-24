@@ -1,9 +1,9 @@
 {
     "banco": "Eco-Tech Bank",
     "version": "2.0.1",
-    "usuario": "Desarrollador Avant-garde",
+    "usuario": "tester",
     "pin": "1234",
-    "saldoInicial": 150000,
+    "saldoInicial": 1000,
     "cotizacionDolar": 1120,
     "mensajeBienvenida": "Bienvenido al sistema financiero del futuro."
 }

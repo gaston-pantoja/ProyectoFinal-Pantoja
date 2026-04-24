@@ -1,30 +1,43 @@
-// --- ESTADO DE LA APP ---
+
 let cuenta = {
-    usuario: "",
-    saldo: 0,
+    usuario: "gaston",
+    saldo: 1000,
     movimientos: JSON.parse(localStorage.getItem('historial')) || []
 };
 
-// --- INICIALIZACIÓN (DATOS REMOTOS) ---
+
 async function cargarDatos() {
     try {
         const resp = await fetch('./data/data.json');
         const data = await resp.json();
+
+        // 1. Cargamos datos fijos
+        cuenta.usuario = data.usuario;
+        cuenta.cotizacion = data.cotizacionDolar;
+
+        // 2. Lógica de Saldo (Prioridad LocalStorage)
+        const saldoGuardado = localStorage.getItem('saldo');
         
-        // Si no hay saldo en localStorage, usamos el del JSON
-        if (!localStorage.getItem('saldo')) {
+        if (saldoGuardado === null) {
             cuenta.saldo = data.saldoInicial;
+            localStorage.setItem('saldo', data.saldoInicial);
         } else {
-            cuenta.saldo = parseFloat(localStorage.getItem('saldo'));
+            cuenta.saldo = parseFloat(saldoGuardado);
         }
-        
-        document.getElementById('dolar-valor').innerText = data.cotizacionDolar;
+
+        // 3. Actualizamos la Interfaz
+        // IMPORTANTE: Asegurate que estos IDs existan en tu HTML
+        const elDolar = document.getElementById('dolar-valor');
+        if (elDolar) elDolar.innerText = cuenta.cotizacion;
+
+        renderizarApp(); 
+
     } catch (error) {
-        console.error("Error cargando base de datos", error);
+        console.error("Error en la matriz de datos:", error);
     }
 }
 
-// --- FUNCIONES CORE ---
+
 function renderizarApp() {
     document.getElementById('saldo-valor').innerText = `$${cuenta.saldo.toLocaleString()}`;
     const lista = document.getElementById('lista-transacciones');
@@ -34,7 +47,7 @@ function renderizarApp() {
         const li = document.createElement('li');
         li.className = m.tipo === 'Depósito' ? 'txt-eco' : 'txt-danger';
         li.innerHTML = `<strong>${m.tipo}:</strong> $${m.monto} <br> <small>${m.fecha}</small>`;
-        lista.prepend(li); // El más nuevo arriba
+        lista.prepend(li); 
     });
 
     localStorage.setItem('saldo', cuenta.saldo);
@@ -54,7 +67,6 @@ function operar(tipo) {
         return;
     }
 
-    // Ejecutar lógica de negocio
     tipo === 'Depósito' ? cuenta.saldo += monto : cuenta.saldo -= monto;
 
     cuenta.movimientos.push({
@@ -75,7 +87,7 @@ function operar(tipo) {
     }).showToast();
 }
 
-// --- EVENTOS ---
+
 document.getElementById('btn-login').addEventListener('click', () => {
     const pin = document.getElementById('pin-input').value;
     if (pin === "1234") {
@@ -92,5 +104,5 @@ document.getElementById('btn-deposito').addEventListener('click', () => operar('
 document.getElementById('btn-extraccion').addEventListener('click', () => operar('Extracción'));
 document.getElementById('btn-logout').addEventListener('click', () => location.reload());
 
-// Arrancar sistema
+
 cargarDatos();
