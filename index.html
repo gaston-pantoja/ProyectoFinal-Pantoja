@@ -3,48 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco-Tech Bank | Avanzada Financiera</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <title>Eco-Tech Bank | Acceso</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body>
-    <div id="app">
-        <header>
-            <h1>Eco-Tech Bank</h1>
-            <p id="fecha-actual"></p>
-        </header>
+<body class="auth-body">
+    <main class="login-container">
+        <div class="glass-card">
+            <header>
+                <h1>Eco-Tech Bank</h1>
+                <p>Industrial Avant-Garde System</p>
+            </header>
 
-        <div id="login-container">
-            <h3>Bienvenido a la 22nd Century Bank</h3>
-            <input type="password" id="pin-input" value="1234" placeholder="Ingrese PIN">
-            <button id="btn-login">Entrar al Sistema</button>
-        </div>
-
-        <div id="dashboard" class="hidden">
-            <div class="balance-card">
-                <h2>Saldo: <span id="saldo-valor">$0</span></h2>
-                <small>Cotización Dolar: $<span id="dolar-valor">0</span></small>
-            </div>
-
-            <div class="operaciones">
-                <input type="number" id="monto-input" placeholder="Monto de la operación">
-                <div class="grid-botones">
-                    <button id="btn-deposito" class="btn-eco">Depositar</button>
-                    <button id="btn-extraccion" class="btn-danger">Extraer</button>
+            <div id="auth-box">
+                <div id="login-form">
+                    <input type="text" id="user-input" placeholder="Nombre del Usuario">
+                    <input type="password" id="pin-input" placeholder="PIN de seguridad">
+                    <button id="btn-ingresar" class="btn-primary">Ingresar al Sistema</button>
+                    <p class="register-link">¿Nuevo operador? Registrarse</p>
                 </div>
             </div>
-
-            <div class="movimientos">
-                <h4>Historial de Transacciones</h4>
-                <ul id="lista-transacciones"></ul>
-            </div>
-
-            <button id="btn-logout">Cerrar Sesión</button>
         </div>
-    </div>
+    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script src="./js/main.js"></script>
+    <script src="./js/login.js"></script>
 </body>
 </html>

@@ -1,117 +1,131 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+/* --- VARIABLES --- */
+:root {
+    --primary-green: #00ff88;
+    --danger-red: #ff4d4d;
+    --glass-bg: rgba(255, 255, 255, 0.05);
 }
 
-:root {
-    --primary: #1a1a1a;    /* Negro Industrial */
-    --accent: #27ae60;     /* Verde Compromiso Ambiental */
-    --danger: #e74c3c;     /* Rojo Alerta */
-    --light: #f8f9fa;      /* Gris Técnico */
-    --white: #ffffff;
+/* --- RESET TOTAL --- */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Segoe UI', sans-serif;
+    border-radius: 0px !important; /* Cuadratura forzada en todo el universo */
 }
 
 body {
-    background-color: #eef2f3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     min-height: 100vh;
-    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
 }
 
-.hidden { display: none !important; }
-
-/* Contenedor Principal */
-#app {
-    background: var(--white);
-    width: 90%;
-    max-width: 400px;
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    border-top: 5px solid var(--accent);
-}
-
-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-h1 { font-size: 1.5rem; letter-spacing: -1px; }
-
-/* Tarjeta de Saldo */
-.balance-card {
-    background: var(--primary);
-    color: var(--white);
-    padding: 1.5rem;
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-#saldo-valor {
-    display: block;
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--accent);
-}
-
-/* Inputs y Botones */
-input {
+/* --- CONTENEDOR --- */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 30px;
     width: 100%;
-    padding: 12px;
-    margin-bottom: 1rem;
-    border: 2px solid #eee;
-    border-radius: 8px;
-    outline: none;
-    transition: 0.3s;
+    max-width: 420px;
 }
 
-input:focus { border-color: var(--accent); }
+/* --- LAYOUT DEL CAJERO (DASHBOARD) --- */
+#dashboard .balance-card {
+    background: rgba(0,0,0,0.3);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 5px solid var(--primary-green);
+    text-align: center;
+}
 
+/* Esto soluciona el problema de "se ve vertical" */
 .grid-botones {
     display: flex;
     gap: 10px;
-    margin-bottom: 1.5rem;
+    margin-top: 10px;
 }
 
-button {
-    flex: 1;
+.grid-botones button {
+    flex: 1; /* Hace que ambos botones midan lo mismo */
+}
+
+/* --- ELEMENTOS --- */
+input, button {
+    width: 100%;
     padding: 12px;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.3s;
+    outline: none;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
-.btn-eco { background: var(--accent); color: white; }
-.btn-danger { background: var(--danger); color: white; }
-#btn-login { background: var(--primary); color: white; width: 100%; }
+input {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 10px;
+}
 
-button:hover { opacity: 0.9; transform: translateY(-2px); }
+.btn-eco { background: var(--primary-green); color: #0f0c29; cursor: pointer; }
+.btn-danger { background: var(--danger-red); color: white; cursor: pointer; }
 
-/* Historial de Movimientos */
+#btn-logout {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-top: 20px;
+}
+
+/* --- HISTORIAL --- */
+
+/* Separar el historial de los botones de operación */
 .movimientos {
-    margin-top: 1.5rem;
-    border-top: 1px solid #eee;
-    padding-top: 1rem;
-}
-
-#lista-transacciones {
-    list-style: none;
-    max-height: 200px;
+    margin-top: 30px; /* Espacio extra para que no se vea "pegado" */
+    max-height: 200px; /* Altura controlada para evitar que el scroll sea infinito */
     overflow-y: auto;
+    padding-right: 12px;
 }
 
+/* Título del historial con aire */
+.movimientos h3 {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+/* --- ESTILO DE SCROLLBAR INDUSTRIAL --- */
+
+/* Contenedor del scroll (Chrome, Edge, Safari) */
+.movimientos::-webkit-scrollbar {
+    width: 4px; /* Barra muy delgada y discreta */
+}
+
+.movimientos::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    margin: 10px 0; /* Hace que la barra no toque los bordes de la tarjeta */
+}
+
+.movimientos::-webkit-scrollbar-thumb {
+    background: var(--primary-green);
+    border-radius: 0px; 
+}
+
+/* Soporte para Firefox */
+.movimientos {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-green) transparent;
+}
+
+#lista-transacciones { list-style: none; }
 #lista-transacciones li {
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 8px;
     padding: 10px;
-    border-bottom: 1px solid #f9f9f9;
-    font-size: 0.85rem;
+    border-left: 4px solid var(--primary-green);
 }
-
-.txt-eco { color: var(--accent); }
-.txt-danger { color: var(--danger); }

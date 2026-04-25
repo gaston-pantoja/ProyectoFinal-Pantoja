@@ -1,3 +1,10 @@
+// Verificación de sesión al cargar el dashboard
+const usuarioLogueado = JSON.parse(localStorage.getItem('usuarioLogueado'));
+
+if (!usuarioLogueado) {
+    // Si no hay sesión, expulsamos al intruso al login
+    window.location.href = '../index.html';
+}
 
 let cuenta = {
     usuario: "gaston",
@@ -8,7 +15,7 @@ let cuenta = {
 
 async function cargarDatos() {
     try {
-        const resp = await fetch('./data/data.json');
+        const resp = await fetch('../data/data.json');
         const data = await resp.json();
 
         // 1. Cargamos datos fijos
@@ -31,6 +38,7 @@ async function cargarDatos() {
         if (elDolar) elDolar.innerText = cuenta.cotizacion;
 
         renderizarApp(); 
+        
 
     } catch (error) {
         console.error("Error en la matriz de datos:", error);
@@ -87,22 +95,26 @@ function operar(tipo) {
     }).showToast();
 }
 
-
-document.getElementById('btn-login').addEventListener('click', () => {
-    const pin = document.getElementById('pin-input').value;
-    if (pin === "1234") {
-        document.getElementById('login-container').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        Swal.fire('Bienvenido', 'Eco-Tech Bank le saluda', 'success');
-        renderizarApp();
-    } else {
-        Swal.fire('Acceso Denegado', 'PIN incorrecto', 'error');
-    }
-});
-
 document.getElementById('btn-deposito').addEventListener('click', () => operar('Depósito'));
 document.getElementById('btn-extraccion').addEventListener('click', () => operar('Extracción'));
-document.getElementById('btn-logout').addEventListener('click', () => location.reload());
+// Reemplazá la línea de btn-logout por esta o asegurate de usar la de abajo
+const btnLogout = document.getElementById('btn-logout');
+if (btnLogout) {
+    btnLogout.onclick = () => {
+        localStorage.removeItem('usuarioLogueado');
+        window.location.href = '../index.html';
+    };
+}
 
 
 cargarDatos();
+
+// Colocalo al final de tu js/main.js
+const btnCerrarSesion = document.getElementById('btn-cerrar-sesion');
+
+if (btnCerrarSesion) {
+    btnCerrarSesion.onclick = () => {
+        localStorage.removeItem('usuarioLogueado'); // Quitamos el permiso
+        window.location.href = '../index.html';    // Salimos a la raíz
+    };
+}
