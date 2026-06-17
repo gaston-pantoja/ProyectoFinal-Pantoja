@@ -1,5 +1,5 @@
-
 import React from 'react';
+import { Link } from 'react-router-dom'; 
 import CartWidget from './CartWidget';
 
 const NavBar = () => {
@@ -13,10 +13,10 @@ const NavBar = () => {
       borderBottom: '1px solid #333'
     }}>
 
-      <div className="nav-logo" style={{ fontWeight: 'bold', fontSize: '1.5rem', color: '#fff' }}>
+      
+      <Link className="nav-logo" to="/" style={{ fontWeight: 'bold', fontSize: '1.5rem', color: '#fff', textDecoration: 'none' }}>
         <span style={{ color: '#00ff88' }}>Eco</span>Tech
-      </div>
-
+      </Link>
 
       <ul className="nav-links" style={{
         display: 'flex',
@@ -25,11 +25,23 @@ const NavBar = () => {
         margin: 0,
         padding: 0
       }}>
-        <li style={{ color: '#aaa', fontSize: '1rem' }}>Biotecnología</li>
-        <li style={{ color: '#aaa', fontSize: '1rem' }}>Automatización</li>
-        <li style={{ color: '#aaa', fontSize: '1rem' }}>Hardware Eficiente</li>
+        
+        <li>
+          <Link to="/category/biotecnologia" style={{ color: '#aaa', fontSize: '1rem', textDecoration: 'none' }}>
+            Biotecnología
+          </Link>
+        </li>
+        <li>
+          <Link to="/category/automatizacion" style={{ color: '#aaa', fontSize: '1rem', textDecoration: 'none' }}>
+            Automatización
+          </Link>
+        </li>
+        <li>
+          <Link to="/category/hardware-eficiente" style={{ color: '#aaa', fontSize: '1rem', textDecoration: 'none' }}>
+            Hardware Eficiente
+          </Link>
+        </li>
       </ul>
-
 
       <CartWidget />
     </nav>
