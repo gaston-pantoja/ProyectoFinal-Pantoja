@@ -1,19 +1,27 @@
-
 import React from 'react';
+import { Link } from 'react-router-dom'; 
+import { useCart } from '../context/CartContext'; 
 
 const CartWidget = () => {
-
-  const itemsInCart = 5;
+  
+  const { totalQuantity } = useCart();
 
   return (
-    <div className="d-flex align-items-center position-relative" style={{ cursor: 'pointer' }}>
-
+    
+    <Link to="/cart" className="d-flex align-items-center position-relative text-decoration-none" style={{ cursor: 'pointer' }}>
+      
       <span style={{ fontSize: '1.6rem' }}>🛒</span>
 
-      <span className="badge rounded-pill bg-success position-absolute top-0 start-100 translate-middle text-dark fw-bold">
-        {itemsInCart}
-      </span>
-    </div>
+      
+      {totalQuantity > 0 && (
+        <span 
+          className="badge rounded-pill position-absolute top-0 start-100 translate-middle text-dark fw-bold"
+          style={{ backgroundColor: '#00ff88' }} 
+        >
+          {totalQuantity}
+        </span>
+      )}
+    </Link>
   );
 };
 

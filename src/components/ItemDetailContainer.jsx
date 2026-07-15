@@ -1,22 +1,23 @@
-
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { db } from "../config/firebase"; 
 import { doc, getDoc } from "firebase/firestore";
 import ItemCount from './ItemCount'; 
+import { useCart } from '../context/CartContext'; 
 
 const ItemDetailContainer = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [quantityAdded, setQuantityAdded] = useState(0); 
   const { itemId } = useParams();
+  
+  const { addItem } = useCart(); 
 
   useEffect(() => {
     setLoading(true);
 
-    
     const docRef = doc(db, "products", itemId);
 
-    
     getDoc(docRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -30,8 +31,8 @@ const ItemDetailContainer = () => {
   }, [itemId]);
 
   const handleOnAdd = (quantity) => {
-    
-    alert(`Agregadas ${quantity} unidades de ${product.name} a la orden de producción.`);
+    setQuantityAdded(quantity); 
+    addItem(product, quantity);
   };
 
   if (loading) {
@@ -69,8 +70,18 @@ const ItemDetailContainer = () => {
             <h3 className="text-success fw-bold my-4">Valor: ${product.price} USD</h3>
           </div>
           
-          
-          <ItemCount stock={product.stock} onAdd={handleOnAdd} />
+          {quantityAdded > 0 ? (
+            <div className="mt-3">
+              <div className="alert alert-success bg-dark border-success text-success text-center mb-3">
+                ✓ Agregadas {quantityAdded} unidades a la línea de montaje.
+              </div>
+              <Link to="/cart" className="btn btn-success w-100 fw-bold py-2 shadow-sm text-uppercase">
+                Terminar Compra
+              </Link>
+            </div>
+          ) : (
+            <ItemCount stock={product.stock} onAdd={handleOnAdd} />
+          )}
         </div>
       </div>
     </div>
