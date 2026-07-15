@@ -1,11 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProducts, getProductsByCategory } from '../data/asyncMock'; 
+import { db } from "../config/firebase"; 
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const ItemListContainer = (props) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  
   
   const { categoryId } = useParams();
 
@@ -13,15 +14,27 @@ const ItemListContainer = (props) => {
     setLoading(true);
     
     
-    const asyncFunction = categoryId ? getProductsByCategory : getProducts;
+    const productsRef = collection(db, "products");
 
-    asyncFunction(categoryId)
-      .then(response => setProducts(response))
-      .catch(error => console.error("Error al sincronizar catálogo:", error))
+    
+    const q = categoryId 
+      ? query(productsRef, where("category", "==", categoryId))
+      : productsRef;
+
+    
+    getDocs(q)
+      .then((response) => {
+        
+        const productsAdapted = response.docs.map((doc) => {
+          const data = doc.data();
+          return { id: doc.id, ...data };
+        });
+        setProducts(productsAdapted);
+      })
+      .catch(error => console.error("Error al sincronizar catálogo con Firebase:", error))
       .finally(() => setLoading(false));
   }, [categoryId]); 
 
- 
   if (loading) {
     return (
       <div className="container text-center my-5 py-5 text-success">
@@ -33,7 +46,6 @@ const ItemListContainer = (props) => {
 
   return (
     <div className="container my-5">
-      
       
       <div className="p-5 rounded mb-5" style={{ backgroundColor: '#1e1e1e', borderLeft: '5px solid #00ff88' }}>
         <h1 className="display-5 fw-bold text-white mb-3">
@@ -49,7 +61,6 @@ const ItemListContainer = (props) => {
         )}
       </div>
 
-      
       <div className="row">
         {products.map(prod => (
           <div className="col-md-4 mb-4" key={prod.id}>
@@ -65,6 +76,7 @@ const ItemListContainer = (props) => {
                   <h5 className="card-title fw-bold text-white mb-2">{prod.name}</h5>
                   <p className="card-text fw-bold fs-5" style={{ color: '#00ff88' }}>${prod.price} USD</p>
                 </div>
+                
                 
                 <Link to={`/item/${prod.id}`} className="btn btn-outline-success w-100 mt-3 fw-bold" style={{ borderColor: '#00ff88', color: '#00ff88' }}>
                   Ver Detalle Avanzado

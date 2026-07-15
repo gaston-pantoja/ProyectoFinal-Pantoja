@@ -1,34 +1,65 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getProductById } from '../data/asyncMock';
+import { db } from "../config/firebase"; 
+import { doc, getDoc } from "firebase/firestore";
+import ItemCount from './ItemCount'; 
 
 const ItemDetailContainer = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [quantity, setQuantity] = useState(1);
   const { itemId } = useParams();
 
   useEffect(() => {
     setLoading(true);
-    getProductById(itemId)
-      .then(response => setProduct(response))
-      .catch(error => console.error(error))
+
+    
+    const docRef = doc(db, "products", itemId);
+
+    
+    getDoc(docRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setProduct({ id: snapshot.id, ...snapshot.data() });
+        } else {
+          console.error("El componente no existe en el catálogo.");
+        }
+      })
+      .catch((error) => console.error("Error cargando especificaciones:", error))
       .finally(() => setLoading(false));
   }, [itemId]);
 
+  const handleOnAdd = (quantity) => {
+    
+    alert(`Agregadas ${quantity} unidades de ${product.name} a la orden de producción.`);
+  };
+
   if (loading) {
-    return <div className="container text-center my-5 text-success"><h3>Extrayendo especificaciones de hardware...</h3></div>;
+    return (
+      <div className="container text-center my-5 text-success">
+        <h3 className="font-monospace">Extrayendo especificaciones de hardware en la nube...</h3>
+      </div>
+    );
   }
 
   if (!product) {
-    return <div className="container text-center my-5 text-white"><h3>Componente no registrado.</h3></div>;
+    return (
+      <div className="container text-center my-5 text-white">
+        <h3>Componente no registrado.</h3>
+      </div>
+    );
   }
 
   return (
     <div className="container my-5 text-white">
       <div className="row bg-dark p-5 rounded border border-secondary">
         <div className="col-md-6">
-          <img src={product.img} alt={product.name} className="img-fluid rounded" style={{ maxHeight: '400px', width: '100%', objectFit: 'cover' }} />
+          <img 
+            src={product.img} 
+            alt={product.name} 
+            className="img-fluid rounded" 
+            style={{ maxHeight: '400px', width: '100%', objectFit: 'cover' }} 
+          />
         </div>
         <div className="col-md-6 d-flex flex-column justify-content-between">
           <div>
@@ -38,16 +69,8 @@ const ItemDetailContainer = () => {
             <h3 className="text-success fw-bold my-4">Valor: ${product.price} USD</h3>
           </div>
           
-          <div className="bg-black p-3 rounded border border-secondary mt-3">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <button className="btn btn-outline-light btn-sm" onClick={() => quantity > 1 && setQuantity(quantity - 1)}>-</button>
-              <span className="fs-5 fw-bold">{quantity} Unidades</span>
-              <button className="btn btn-outline-light btn-sm" onClick={() => quantity < product.stock && setQuantity(quantity + 1)}>+</button>
-            </div>
-            <button className="btn btn-success w-100 fw-bold" onClick={() => alert(`Agregadas ${quantity} unidades.`)}>
-              Incorporar al Carrito
-            </button>
-          </div>
+          
+          <ItemCount stock={product.stock} onAdd={handleOnAdd} />
         </div>
       </div>
     </div>
